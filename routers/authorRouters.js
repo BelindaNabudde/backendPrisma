@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const authorSchema = require("../helpers/joi-schema");
+const {authorSchema} = require("../helpers/joi-schema");
 const validateData = require("../helpers/validation");
 
 const {

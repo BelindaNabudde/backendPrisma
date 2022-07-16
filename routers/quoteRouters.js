@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const quoteSchema = require("../helpers/joi-schema");
+const {quoteSchema} = require("../helpers/joi-schema");
 const validateData = require("../helpers/validation");
 
 // import controllers

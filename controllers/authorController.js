@@ -14,14 +14,16 @@ const getAllAuthors = async (req, res) => {
 // POST an Author
 const createAuthor = async (req, res) => {
   try {
-    // const { name, quotes } = req.body;
+    const { name, quotes } = req.body;
     const newAuthor = await prisma.author.create({
-      data: req.body
+      data: { name, quotes }
     });
-    res.json({ message: "Added quote succesfully", author: newAuthor });
-    // res.status(200).json({ message: "Quote has been added", quote:newQuote });
+    res
+      .status(200)
+      .json({ message: "Added author succesfully", author: newAuthor });
+    // res.status(200).json({ message: "Quote has been added", author:newAuthor });
   } catch (error) {
-    res.status(400).json("Creation failed");
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -73,6 +75,7 @@ const deleteAuthor = async (req, res) => {
         id: Number(id)
       }
     });
+
     if (author) {
       res.status(200).json({ message: "Author has been deleted.", author });
     } else {

@@ -14,14 +14,14 @@ const getAllQuotes = async (req, res) => {
 // POST a quote
 const createQuote = async (req, res) => {
   try {
-    // const { text, authorId } = req.body;
-    const newQuote = await prisma.quote.create({
-      data: req.body
+    const { text, authorId } = req.body;
+    const quote = await prisma.quote.create({
+      data: { text, authorId }
     });
-    res.json({ message: "Added quote succesfully", quote: newQuote });
-    // res.status(200).json({ message: "Quote has been added", quote:newQuote });
+    res.status(200).json({ message: "Added quote succesfully", quote });
+    // res.status(200).json({ message: "Quote has been added", quote });
   } catch (error) {
-    res.status(400).json("Creation failed");
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -32,8 +32,7 @@ const getQuoteById = async (req, res) => {
     const quote = await prisma.quote.findUnique({
       where: {
         id: Number(id)
-      },
-      include: { author: true }
+      }
     });
     if (quote) {
       res.status(200).json(quote);
@@ -68,16 +67,17 @@ const updateQuote = async (req, res) => {
 // DELETE a quote
 const deleteQuote = async (req, res) => {
   try {
+    const id = req.params.id;
     const quote = await prisma.quote.delete({
       where: {
-        id: Number(req.params.quoteId)
+        id: Number(id)
       }
     });
-    // if (quote) {
-    res.status(200).json({ message: "quote has been deleted.", quote });
-    // } else {
-    // res.status(404).json(`Quote with id ${id} not found`);
-    // }
+    if (quote) {
+      res.status(200).json({ message: "quote has been deleted.", quote });
+    } else {
+      res.status(404).json(`Quote with id ${id} not found`);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
