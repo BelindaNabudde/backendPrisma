@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {authorSchema} = require("../helpers/joi-schema");
+const { authorSchema } = require("../helpers/joi-schema");
 const validateData = require("../helpers/validation");
 
 const {
@@ -12,9 +12,11 @@ const {
   deleteAuthor
 } = require("../controllers/authorController");
 
+const authenticate = require("../helpers/authenticate");
+
 router.get("/", getAllAuthors);
 
-router.post("/", validateData(authorSchema), createAuthor);
+router.post("/", [authenticate,validateData(authorSchema)], createAuthor);
 
 router.get("/:id", getAuthorById);
 

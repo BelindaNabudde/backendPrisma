@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {quoteSchema} = require("../helpers/joi-schema");
+const { quoteSchema } = require("../helpers/joi-schema");
 const validateData = require("../helpers/validation");
 
 // import controllers
@@ -13,9 +13,11 @@ const {
   deleteQuote
 } = require("../controllers/quotesController");
 
+const authenticate = require("../helpers/authenticate");
+
 router.get("/", getAllQuotes);
 
-router.post("/", validateData(quoteSchema), createQuote);
+router.post("/", [authenticate, validateData(quoteSchema)], createQuote);
 
 router.get("/:id", getQuoteById);
 
